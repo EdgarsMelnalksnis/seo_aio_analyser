@@ -33,11 +33,51 @@
     <a href="#performanceModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
   </li>
   <li class="list-group-item d-flex justify-content-between align-items-center">
-    External Factors: <strong>12%</strong>
+    External Factors: <strong>{{ results['Section Scores'].get('External Factors', '0%') }}</strong>
     <a href="#externalFactorsModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
   </li>
 </ul>
-  <h1 id="meta-info" class="mb-4 bg-warning-subtle p-2 rounded">Meta Information in SEO</h1>
+
+<h1 id="external-factors" class="mt-5 mb-4 bg-warning-subtle p-2 rounded">External Factors in SEO</h1>
+<p><strong>External Factors</strong> refer to how your website is perceived and referenced from outside sources. These factors include backlinks, social signals, and listings in authoritative directories.</p>
+
+<h3 class="mt-4">Key Elements of External SEO</h3>
+<ul>
+  <li><strong>Backlinks:</strong> Incoming links from reputable domains improve trust.</li>
+  <li><strong>Referring Domains:</strong> Diversity in backlinks shows natural growth.</li>
+  <li><strong>Presence on Authority Sites:</strong> Being mentioned on Wikipedia, Reddit, or trusted directories boosts credibility.</li>
+  <li><strong>Social Signals:</strong> Sharing and visibility on platforms like Twitter or Facebook may support SEO indirectly.</li>
+</ul>
+
+<h3 class="mt-4">Why External Factors Matter</h3>
+<ul>
+  <li>Google values trustworthy external references as signals of authority</li>
+  <li>External signals complement on-page SEO by proving relevance</li>
+  <li>Diversified backlinks reduce reliance on any single traffic source</li>
+</ul>
+
+<h3 class="mt-4">How We Score External Factors</h3>
+<p>Each of the following contributes to your External Factors score:</p>
+<ul>
+  <li>At least 1 backlink</li>
+  <li>Multiple referring domains</li>
+  <li>Mention in well-known sources (Wikipedia, Reddit, etc.)</li>
+</ul>
+<p>The External Factors score is: <strong>{{ results['Section Scores'].get('External Factors', 0) }}%</strong></p>
+
+<h3 class="mt-4">External Factors Checklist</h3>
+<table class="table table-bordered">
+  <thead class="table-light">
+    <tr><th>Criteria</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Has Backlinks</td><td>{% if results.get('Backlink Count', 4) > 0 %}✅ Yes ({{ results['Backlink Count'] }}){% else %}❌ None found{% endif %}</td></tr>
+    <tr><td>Multiple Referring Domains</td><td>{% if results.get('Referring Domains', 4) > 1 %}✅ Yes ({{ results['Referring Domains'] }}){% else %}❌ Too few ({{ results['Referring Domains'] }}){% endif %}</td></tr>
+    <tr><td>Mentioned on Authoritative Sources</td><td>{% if results.get('In Authority Sources', False) %}✅ Present (e.g., Reddit/Wikipedia){% else %}❌ Not found in public sources{% endif %}</td></tr>
+  </tbody>
+</table>
+
+<h1 id="meta-info" class="mb-4 bg-warning-subtle p-2 rounded">Meta Information in SEO</h1>
 
   <p><strong>Meta information</strong> refers to HTML elements that provide metadata about your web page to search engines and browsers. These tags do not affect how the page looks but play a crucial role in SEO and accessibility.</p>
 

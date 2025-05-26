@@ -55,8 +55,16 @@ def index():
             ]
             performance_score = int((sum(perf_checks) / len(perf_checks)) * 100)
             results.setdefault("Section Scores", {})["Performance"] = performance_score
-
+            
             print("DEBUG Performance Checks:", perf_checks)
+
+            external_score_parts = [
+                results.get("Backlink Count", 0) > 0,
+                results.get("Referring Domains", 0) > 1,
+                results.get("In Authority Sources", False)  # add logic later
+            ]
+            results["Section Scores"]["External Factors"] = int(sum(external_score_parts) / len(external_score_parts) * 100)
+
 
         except Exception as e:
             error = str(e)
