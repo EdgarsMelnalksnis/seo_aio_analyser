@@ -123,6 +123,50 @@
   </tbody>
 </table>
 
+<h1 id="link-structure" class="mt-5 mb-4 bg-warning-subtle p-2 rounded">Page Structure in SEO</h1>
+<p><strong>Page Structure</strong> refers to how content is organized using headings (H1–H6), semantic HTML tags, and consistent formatting. A good structure helps both search engines and users understand your content hierarchy.</p>
+
+<h3 class="mt-4">Key Elements of Page Structure</h3>
+<ul>
+  <li><strong>H1 Tag:</strong> One main heading per page (used for page title).</li>
+  <li><strong>Heading Hierarchy:</strong> H2 for sections, H3 for subsections, etc.</li>
+  <li><strong>Semantic Tags:</strong> Use of <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;nav&gt;</code>, etc. for layout clarity.</li>
+  <li><strong>No Duplicate H1s:</strong> Only one H1 should exist per page.</li>
+  <li><strong>Descriptive Anchor Texts:</strong> Internal links should describe their destination.</li>
+</ul>
+
+<h3 class="mt-4">Why Page Structure Matters</h3>
+<ul>
+  <li>Improves readability and accessibility</li>
+  <li>Helps crawlers index content correctly</li>
+  <li>Supports featured snippets and rich results</li>
+</ul>
+
+<h3 class="mt-4">How We Score Page Structure</h3>
+<p>Each of the following checks contributes equally to the Page Structure score:</p>
+<ul>
+  <li>Single H1 tag present</li>
+  <li>Multiple H2/H3 tags used appropriately</li>
+  <li>No duplicate or missing heading levels</li>
+  <li>Anchor text used instead of empty links</li>
+  <li>Semantic tags detected</li>
+</ul>
+<p>The Page Structure score is: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong></p>
+
+<h3 class="mt-4">Page Structure Checklist</h3>
+<table class="table table-bordered">
+  <thead class="table-light">
+    <tr><th>Criteria</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Single H1 Tag Present</td><td>{% if results.get('H1 Count', 0) == 1 %}✅ Pass{% else %}❌ Issue{% endif %}</td></tr>
+    <tr><td>Multiple H2/H3 Tags Used</td><td>{% if results.get('H2 Count', 0) + results.get('H3 Count', 0) > 1 %}✅ Yes{% else %}❌ Not Enough{% endif %}</td></tr>
+    <tr><td>Heading Levels Are Logical</td><td>{% if results.get('Heading Hierarchy Valid', False) %}✅ OK{% else %}❌ Problem{% endif %}</td></tr>
+    <tr><td>Anchor Texts Descriptive</td><td>{% if results.get('Has Empty Links', True) == False %}✅ Descriptive{% else %}❌ Missing Text{% endif %}</td></tr>
+    <tr><td>Semantic Tags Detected</td><td>{% if results.get('Has Semantic Tags', False) %}✅ Found{% else %}❌ Missing{% endif %}</td></tr>
+  </tbody>
+</table>
+
 <h3 class="mt-4">How We Score Meta Information</h3>
 <p>Each check below contributes equally. We calculate the Meta Information score based on how many of the following tags are present:</p>
 <ul>
