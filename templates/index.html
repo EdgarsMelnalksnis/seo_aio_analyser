@@ -13,30 +13,31 @@
     <button type="submit" class="btn btn-primary">Analyze</button>
   </div>
 </form>
-
+{% if results %}
 {% if results %}
 <ul class="list-group mb-5">
   <li class="list-group-item d-flex justify-content-between align-items-center">
     Meta Information: <strong>{{ meta_info_score }}%</strong>
-    <a href="#meta-info" class="scroll-link btn btn-outline-info btn-sm">What is this?</a>
+    <a href="#meta-info" class="scroll-link" class="btn btn-outline-info btn-sm">What is this?</a>
   </li>
   <li class="list-group-item d-flex justify-content-between align-items-center">
   Page Quality: <strong>{{ page_quality_score }}%</strong>
   <a href="#page-quality" class="scroll-link btn btn-outline-info btn-sm">What is this?</a>
 </li>
   <li class="list-group-item d-flex justify-content-between align-items-center">
-  Page Structure: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong>
+  Page Structure: <strong>{% if results.get('Section Scores') %}{{ results['Section Scores'].get('Page Structure', 0) }}%{% endif %}</strong>
   <a href="#link-structure" class="scroll-link btn btn-outline-info btn-sm">What is this?</a>
 </li>
   <li class="list-group-item d-flex justify-content-between align-items-center">
-    Performance: <strong>{{ results['Section Scores'].get('Performance', 0) }}%</strong>
+    Performance: <strong>{% if results.get('Section Scores') %}{{ results['Section Scores'].get('Performance', 0) }}%{% endif %}</strong>
     <a href="#performanceModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
   </li>
   <li class="list-group-item d-flex justify-content-between align-items-center">
-    External Factors: <strong>{{ results['Section Scores'].get('External Factors', '0%') }}</strong>
+    External Factors: <strong>{% if results.get('Section Scores') %}{{ results['Section Scores'].get('External Factors', '0%') }}{% endif %}</strong>
     <a href="#externalFactorsModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
   </li>
 </ul>
+
 
 <h1 id="meta-info" class="mb-4 bg-warning-subtle p-2 rounded">Meta Information in SEO</h1>
 
@@ -79,6 +80,27 @@
     <tr><td>Favicon</td><td>{% if results.get('Favicon Linked') == 'Present' %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
   </tbody>
 </table>
+
+<h3 class="mt-4">How We Score Meta Information</h3>
+<p>Each check below contributes equally. We calculate the Meta Information score based on how many of the following tags are present:</p>
+<ul>
+  <li>Title</li>
+  <li>Meta Description</li>
+  <li>robots.txt (Crawlability)</li>
+  <li>Canonical URL</li>
+  <li>Language tag</li>
+  <li>Alternate/Hreflang</li>
+  <li>Viewport tag</li>
+  <li>Favicon</li>
+  <li>Charset encoding</li>
+  <li>Domain quality</li>
+  <li>SEO-friendly page URL</li>
+</ul>
+<p>The Meta Information score is: <strong>{{ meta_info_score }}%</strong></p>
+{% endif %}
+<a href="/" class="btn btn-primary mt-4">← Back to Report</a>
+</div>
+
 
 <h1 id="page-quality" class="mt-5 mb-4 bg-warning-subtle p-2 rounded">Page Quality in SEO</h1>
 <p><strong>Page Quality</strong> refers to the usefulness, originality, and clarity of your webpage content. Google ranks pages higher when they offer well-structured, unique, and meaningful information to users.</p>
@@ -123,7 +145,6 @@
     <tr><td>H1 Tag Present in Content</td><td>{% if results.get('H1 in Body Text', False) %}✅ Present{% else %}❌ Missing in body section{% endif %}</td></tr>
   </tbody>
 </table>
-
 <h1 id="link-structure" class="mt-5 mb-4 bg-warning-subtle p-2 rounded">Page Structure in SEO</h1>
 <p><strong>Page Structure</strong> refers to how content is organized using headings (H1–H6), semantic HTML tags, and consistent formatting. A good structure helps both search engines and users understand your content hierarchy.</p>
 
@@ -152,8 +173,9 @@
   <li>Anchor text used instead of empty links</li>
   <li>Semantic tags detected</li>
 </ul>
-<p>The Page Structure score is: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong></p>
-
+{% if results and results.get('Section Scores') %}
+<p>The Page Structure score is: <strong>{% if results.get('Section Scores') %}{{ results['Section Scores'].get('Page Structure', 0) }}%{% endif %}</strong></p>
+{% endif %}
 <h3 class="mt-4">Page Structure Checklist</h3>
 <table class="table table-bordered">
   <thead class="table-light">
@@ -196,7 +218,7 @@
   <li>Fewer than 100 media/request assets</li>
   <li>Compression enabled</li>
 </ul>
-<p>The Performance score is: <strong>{{ results['Section Scores'].get('Performance', 0) }}%</strong></p>
+<p>The Performance score is: <strong>{% if results.get('Section Scores') %}{{ results['Section Scores'].get('Performance', 0) }}%{% endif %}</strong></p>
 
 <h3 class="mt-4">Performance Checklist</h3>
 <table class="table table-bordered">
@@ -212,7 +234,6 @@
   </tbody>
 </table>
 
-␁
 
 <h1 id="external-factors" class="mt-5 mb-4 bg-warning-subtle p-2 rounded">External Factors in SEO</h1>
 <p><strong>External Factors</strong> refer to how your website is perceived and referenced from outside sources. These factors include backlinks, social signals, and listings in authoritative directories.</p>
@@ -239,7 +260,7 @@
   <li>Multiple referring domains</li>
   <li>Mention in well-known sources (Wikipedia, Reddit, etc.)</li>
 </ul>
-<p>The External Factors score is: <strong>{{ results['Section Scores'].get('External Factors', 0) }}%</strong></p>
+<p>The External Factors score is: <strong>{% if results.get('Section Scores') %}{{ results['Section Scores'].get('External Factors', 0) }}%{% endif %}</strong></p>
 
 <h3 class="mt-4">External Factors Checklist</h3>
 <table class="table table-bordered">
@@ -252,11 +273,6 @@
     <tr><td>Mentioned on Authoritative Sources</td><td>{% if results.get('In Authority Sources', False) %}✅ Present (e.g., Reddit/Wikipedia){% else %}❌ Not found in public sources{% endif %}</td></tr>
   </tbody>
 </table>
-
-␁
-{% endif %}
-<a href="/" class="btn btn-primary mt-4">← Back to Report</a>
-</div>
 <script>
   document.querySelectorAll('.scroll-link').forEach(link => {
     link.addEventListener('click', function(e) {
@@ -272,4 +288,4 @@
 </script>
 </body>
 </html>
-
+{% endif %}
