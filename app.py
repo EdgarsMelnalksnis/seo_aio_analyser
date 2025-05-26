@@ -8,6 +8,7 @@ def index():
     results = {}
     meta_info_score = 0
     page_quality_score = 0
+    performance_score = 0
     error = None
 
     if request.method == "POST":
@@ -18,7 +19,7 @@ def index():
         try:
             results = analyze_seo(url)
 
-            # 🧠 Meta score
+            # --- Meta Information Score ---
             meta_checks = [
                 results.get("Page Title") != "Missing",
                 results.get("Meta Description") != "Missing",
@@ -34,7 +35,7 @@ def index():
             ]
             meta_info_score = int((sum(meta_checks) / len(meta_checks)) * 100)
 
-            # ✅ Page Quality score with safe .get() usage
+            # --- Page Quality Score ---
             quality_checks = [
                 results.get("Word Count", 0) >= 300,
                 results.get("Has Placeholder Text", False) is False,
@@ -42,10 +43,20 @@ def index():
                 results.get("Paragraph Count", 0) >= 3,
                 results.get("H1 in Body Text", False) is True
             ]
-            passed_quality = sum(1 for passed in quality_checks if passed)
-            page_quality_score = int((passed_quality / len(quality_checks)) * 100)
+            page_quality_score = int((sum(quality_checks) / len(quality_checks)) * 100)
 
-            print("DEBUG Page Quality Checks:", quality_checks)
+            # --- Performance Score ---
+            perf_checks = [
+                results.get("Page Load Time", 10) <= 2,
+                results.get("HTML Size (KB)", 1000) <= 500,
+                results.get("Viewport Tag") == "Present",
+                results.get("Total Assets", 999) <= 100,
+                "gzip" in results.get("Response Headers", "") or "zstd" in results.get("Response Headers", "")
+            ]
+            performance_score = int((sum(perf_checks) / len(perf_checks)) * 100)
+            results.setdefault("Section Scores", {})["Performance"] = performance_score
+
+            print("DEBUG Performance Checks:", perf_checks)
 
         except Exception as e:
             error = str(e)
@@ -55,6 +66,7 @@ def index():
         results=results,
         meta_info_score=meta_info_score,
         page_quality_score=page_quality_score,
+        performance_score=performance_score,
         error=error
     )
 

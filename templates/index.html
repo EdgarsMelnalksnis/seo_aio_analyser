@@ -115,11 +115,11 @@
     <tr><th>Criteria</th><th>Status</th></tr>
   </thead>
   <tbody>
-    <tr><td>Word Count ≥ 300</td><td>{% if results.get('Word Count', 0) >= 300 %}✅ Pass{% else %}❌ Low{% endif %}</td></tr>
-    <tr><td>No Placeholder Text</td><td>{% if results.get('Has Placeholder Text', False) == False %}✅ Clean{% else %}❌ Found{% endif %}</td></tr>
-    <tr><td>Bullet Points or Lists</td><td>{% if results.get('Has Bullet Points', False) %}✅ Used{% else %}❌ Missing{% endif %}</td></tr>
-    <tr><td>Paragraph Count ≥ 3</td><td>{% if results.get('Paragraph Count', 0) >= 3 %}✅ Adequate{% else %}❌ Too Few{% endif %}</td></tr>
-    <tr><td>H1 Tag Present in Content</td><td>{% if results.get('H1 in Body Text', False) %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Word Count ≥ 300</td><td>{% if results.get('Word Count', 0) >= 300 %}✅ Pass ({{ results['Word Count'] }} words){% else %}❌ Low ({{ results['Word Count'] }} words){% endif %}</td></tr>
+    <tr><td>No Placeholder Text</td><td>{% if results.get('Has Placeholder Text', False) == False %}✅ Clean{% else %}❌ Found placeholder text like “Lorem Ipsum”{% endif %}</td></tr>
+    <tr><td>Bullet Points or Lists</td><td>{% if results.get('Has Bullet Points', False) %}✅ Used{% else %}❌ Missing lists like &lt;ul&gt;/&lt;ol&gt;{% endif %}</td></tr>
+    <tr><td>Paragraph Count ≥ 3</td><td>{% if results.get('Paragraph Count', 0) >= 3 %}✅ Adequate ({{ results['Paragraph Count'] }} paragraphs){% else %}❌ Too Few ({{ results['Paragraph Count'] }} found){% endif %}</td></tr>
+    <tr><td>H1 Tag Present in Content</td><td>{% if results.get('H1 in Body Text', False) %}✅ Present{% else %}❌ Missing in body section{% endif %}</td></tr>
   </tbody>
 </table>
 
@@ -159,11 +159,55 @@
     <tr><th>Criteria</th><th>Status</th></tr>
   </thead>
   <tbody>
-    <tr><td>Single H1 Tag Present</td><td>{% if results.get('H1 Count', 0) == 1 %}✅ Pass{% else %}❌ Issue{% endif %}</td></tr>
-    <tr><td>Multiple H2/H3 Tags Used</td><td>{% if results.get('H2 Count', 0) + results.get('H3 Count', 0) > 1 %}✅ Yes{% else %}❌ Not Enough{% endif %}</td></tr>
-    <tr><td>Heading Levels Are Logical</td><td>{% if results.get('Heading Hierarchy Valid', False) %}✅ OK{% else %}❌ Problem{% endif %}</td></tr>
-    <tr><td>Anchor Texts Descriptive</td><td>{% if results.get('Has Empty Links', True) == False %}✅ Descriptive{% else %}❌ Missing Text{% endif %}</td></tr>
-    <tr><td>Semantic Tags Detected</td><td>{% if results.get('Has Semantic Tags', False) %}✅ Found{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Single H1 Tag Present</td><td>{% if results.get('H1 Count', 0) == 1 %}✅ Pass (1 H1 found){% else %}❌ Issue ({{ results.get('H1 Count', 0) }} H1s found){% endif %}</td></tr>
+    <tr><td>Multiple H2/H3 Tags Used</td><td>{% set h2h3 = results.get('H2 Count', 0) + results.get('H3 Count', 0) %}{% if h2h3 > 1 %}✅ Yes ({{ h2h3 }} headings found){% else %}❌ Not Enough ({{ h2h3 }}){% endif %}</td></tr>
+    <tr><td>Heading Levels Are Logical</td><td>{% if results.get('Heading Hierarchy Valid', False) %}✅ OK{% else %}❌ Problem with heading order{% endif %}</td></tr>
+    <tr><td>Anchor Texts Descriptive</td><td>{% if results.get('Has Empty Links', True) == False %}✅ Descriptive (No empty links){% else %}❌ Found empty anchor text{% endif %}</td></tr>
+    <tr><td>Semantic Tags Detected</td><td>{% if results.get('Has Semantic Tags', False) %}✅ Found (semantic tags present){% else %}❌ Missing semantic structure{% endif %}</td></tr>
+  </tbody>
+</table>
+
+<h1 id="performance" class="mt-5 mb-4 bg-warning-subtle p-2 rounded">Performance in SEO</h1>
+<p><strong>Performance</strong> measures how quickly your website loads and responds to users. It's a ranking factor that affects user satisfaction and SEO.</p>
+
+<h3 class="mt-4">Key Elements of Performance</h3>
+<ul>
+  <li><strong>Page Load Time:</strong> Under 2 seconds for best user experience.</li>
+  <li><strong>Page Size:</strong> Keep HTML size under 500 KB if possible.</li>
+  <li><strong>Mobile Friendliness:</strong> Must include a viewport tag and be usable on small screens.</li>
+  <li><strong>Number of Requests:</strong> Lower is better (under 100 preferred).</li>
+  <li><strong>Compression:</strong> Use gzip, zstd, or Brotli for response compression.</li>
+</ul>
+
+<h3 class="mt-4">Why Performance Matters</h3>
+<ul>
+  <li>Reduces bounce rate and improves engagement</li>
+  <li>Improves search engine rankings (especially mobile)</li>
+  <li>Supports accessibility on slower networks</li>
+</ul>
+
+<h3 class="mt-4">How We Score Performance</h3>
+<p>Each check contributes 20% to the final score:</p>
+<ul>
+  <li>Load time under 2s</li>
+  <li>Page size under 500 KB</li>
+  <li>Mobile-friendly viewport tag</li>
+  <li>Fewer than 100 media/request assets</li>
+  <li>Compression enabled</li>
+</ul>
+<p>The Performance score is: <strong>{{ results['Section Scores'].get('Performance', 0) }}%</strong></p>
+
+<h3 class="mt-4">Performance Checklist</h3>
+<table class="table table-bordered">
+  <thead class="table-light">
+    <tr><th>Criteria</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Page Load Time ≤ 2s</td><td>{% if results.get('Page Load Time', 10) <= 2 %}✅ Fast ({{ results['Page Load Time'] }}s){% else %}❌ Slow ({{ results['Page Load Time'] }}s){% endif %}</td></tr>
+    <tr><td>Page Size ≤ 500 KB</td><td>{% if results.get('HTML Size (KB)', 1000) <= 500 %}✅ Good ({{ results['HTML Size (KB)'] }} KB){% else %}❌ Too Large ({{ results['HTML Size (KB)'] }} KB){% endif %}</td></tr>
+    <tr><td>Viewport Tag Present</td><td>{% if results.get('Viewport Tag') == 'Present' %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Total Media/Assets ≤ 100</td><td>{% if results.get('Total Assets', 999) <= 100 %}✅ OK ({{ results['Total Assets'] }}){% else %}❌ Too Many ({{ results['Total Assets'] }}){% endif %}</td></tr>
+    <tr><td>Compression (gzip/zstd)</td><td>{% if 'zstd' in results.get('Response Headers', '') or 'gzip' in results.get('Response Headers', '') %}✅ Enabled{% else %}❌ Not Detected{% endif %}<br><small>{{ results['Response Headers'] }}</small></td></tr>
   </tbody>
 </table>
 
