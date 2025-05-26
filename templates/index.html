@@ -4,105 +4,105 @@
   <meta charset="UTF-8">
   <title>SEO Summary Report</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: #f9f9f9;
-    }
-    .container {
-      max-width: 900px;
-      margin-top: 40px;
-    }
-    .section-title {
-      margin-top: 30px;
-    }
-  </style>
 </head>
 <body>
-<div class="container">
-  <h1 class="text-center mb-4">SEO Summary Report</h1>
-
-  <!-- Error message -->
-  {% if error %}
-    <div class="alert alert-danger">{{ error }}</div>
-  {% endif %}
-
-  <!-- URL input form -->
-  <form method="POST" class="mb-5">
+<div class="container py-5">
+  <h1 class="mb-4">SEO Summary Report</h1>
+  <form method="POST" class="mb-4">
     <div class="input-group">
       <input type="text" name="url" class="form-control" placeholder="Enter website URL" required>
       <button type="submit" class="btn btn-primary">Analyze</button>
     </div>
   </form>
-
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
   {% if results %}
-    {% if results.get('Section Scores') %}
-      <h3 class="section-title">Section Scores</h3>
-      <ul class="list-group">
-        <li class="list-group-item">Meta information: <strong>{{ results['Section Scores'].get('Meta Information', 0) }}%</strong></li>
-        <li class="list-group-item">Page quality: <strong>{{ results['Section Scores'].get('Content Quality', 0) }}%</strong></li>
-        <li class="list-group-item">Link structure: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong></li>
-        <li class="list-group-item">Performance: <strong>{{ results['Section Scores'].get('Performance', 0) }}%</strong></li>
-        <li class="list-group-item">Images: <strong>{{ results['Section Scores'].get('Images', 0) }}%</strong></li>
-        <li class="list-group-item">Overall SEO score: <strong>{{ results.get('SEO Score', 'N/A') }}</strong></li>
-      </ul>
-    {% endif %}
-
-    <h3 class="section-title">Technical Stats</h3>
     <ul class="list-group">
-      <li class="list-group-item">Response time: <strong>~2.34s</strong></li>  <!-- Placeholder -->
-      <li class="list-group-item">File size: <strong>~45.80 KB</strong></li>  <!-- Placeholder -->
-      <li class="list-group-item">Media files: <strong>{{ results['Image Alt Tags Raw'][2] }}</strong></li>
-      <li class="list-group-item">Image tags with alt: <strong>{{ results['Image Alt Tags Raw'][0] }}</strong></li>
+      <li class="list-group-item">
+        Meta Information: <strong>{{ results['Section Scores'].get('Meta Information', 0) }}%</strong>
+        <a href="#metaInfoModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
+      </li>
+      <li class="list-group-item">
+        Page Quality: <strong>{{ results['Section Scores'].get('Content Quality', 0) }}%</strong>
+        <a href="#pageQualityModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
+      </li>
+      <li class="list-group-item">
+        Link Structure: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong>
+        <a href="#linkStructureModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
+      </li>
+      <li class="list-group-item">
+        Performance: <strong>{{ results['Section Scores'].get('Performance', 0) }}%</strong>
+        <a href="#performanceModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
+      </li>
+      <li class="list-group-item">
+        External Factors: <strong>12%</strong>
+        <a href="#externalFactorsModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
+      </li>
     </ul>
-
-    {% if results.get('Improvement Suggestions') %}
-      <h3 class="section-title text-danger">Critical Tasks To Improve</h3>
-      <ul class="list-group">
-        {% for suggestion in results['Improvement Suggestions'] %}
-          <li class="list-group-item text-danger">❗ {{ suggestion }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-
-    <h3 class="section-title">Improvement Guide</h3>
-    <table class="table table-bordered mt-3">
-      <thead class="table-light">
-        <tr>
-          <th>Issue</th>
-          <th>What it is</th>
-          <th>How to improve</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Dynamic URL Parameters</td>
-          <td>URLs like `?id=123` are harder to index.</td>
-          <td>Use clean URLs like `/product/123`.</td>
-        </tr>
-        <tr>
-          <td>Slow Response</td>
-          <td>Pages that load slowly hurt SEO.</td>
-          <td>Enable caching, compress images, optimize JS/CSS.</td>
-        </tr>
-        <tr>
-          <td>Domain in Title</td>
-          <td>May reduce relevance for search engines.</td>
-          <td>Focus on keywords first in the page title.</td>
-        </tr>
-        <tr>
-          <td>Missing Meta Description</td>
-          <td>Hurts how your page appears in search results.</td>
-          <td>Add a descriptive `<meta name=\"description\">` tag.</td>
-        </tr>
-        <tr>
-          <td>Missing HTML Language</td>
-          <td>Search engines may not know your site's language.</td>
-          <td>Add `lang=\"en\"` (or your actual language) to the `<html>` tag.</td>
-        </tr>
-      </tbody>
-    </table>
   {% endif %}
 </div>
+<!-- 📦 Modal Content (put at end of body in index.html) -->
+<div class="modal fade" id="metaInfoModal" tabindex="-1">
+  <div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Meta Information</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <p><strong>Meta information</strong> helps browsers and bots understand your page. It includes:</p>
+      <ul>
+        <li><strong>Meta Description</strong> – Summarizes the page (used in Google results)</li>
+        <li><strong>HTML Language</strong> – Declared with &lt;html lang="..."&gt;</li>
+        <li><strong>Favicon</strong> – Shown in browser tab bookmarks</li>
+      </ul>
+      <p>Improve meta info by setting a description, declaring language, and adding a favicon.</p>
+    </div>
+  </div></div>
+</div>
+
+<div class="modal fade" id="pageQualityModal" tabindex="-1">
+  <div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Page Quality</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <p>Page quality is determined by content richness and layout:</p>
+      <ul><li>Good paragraph structure</li><li>High word count (300+ recommended)</li><li>Use of strong/bold tags</li></ul>
+    </div>
+  </div></div>
+</div>
+
+<div class="modal fade" id="linkStructureModal" tabindex="-1">
+  <div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Link Structure</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <p>Link structure measures how well internal and external links are organized:</p>
+      <ul><li>Avoid duplicate anchor texts</li><li>Use clean URLs (no ?id=123)</li><li>Provide enough internal links</li></ul>
+    </div>
+  </div></div>
+</div>
+
+<div class="modal fade" id="performanceModal" tabindex="-1">
+  <div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Performance</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <p>Performance impacts user experience and SEO:</p>
+      <ul><li>Minimize server response time</li><li>Optimize images, CSS, JS</li><li>Use caching and compression</li></ul>
+    </div>
+  </div></div>
+</div>
+
+<div class="modal fade" id="externalFactorsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">External Factors</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <p>External SEO factors include:</p>
+      <ul><li>Backlinks from trusted domains</li><li>Mentions on social platforms</li><li>Brand authority signals</li></ul>
+    </div>
+  </div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
-

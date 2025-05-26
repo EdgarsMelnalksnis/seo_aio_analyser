@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
-from utils.seo_checker import analyze_seo
-from utils.aio_checker import analyze_aio
+
+from utils.seo_checker import analyze_seo  # You must have this script with analyze_seo()
 
 app = Flask(__name__)
-app.secret_key = "secret"  # needed for flashing messages
+app.secret_key = "secret"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -19,4 +19,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
