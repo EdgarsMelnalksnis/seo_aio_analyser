@@ -4,7 +4,7 @@ from urllib.parse import urljoin, urlparse
 import json
 import re
 
-PAGESPEED_API_KEY = "YOUR_API_KEY_HERE"  # Replace with your real key
+PAGESPEED_API_KEY = "AIzaSyDXKqXYSZU4N5UOUQWKNdMaIDHPItJ-qs4"  # Replace with your real key
 
 # Weighted scoring parameters
 SCORES = {
@@ -21,6 +21,19 @@ SCORES = {
     "Google PageSpeed Score": 15
 }
 
+SECTION_MAPPING = {
+    "Meta Description": "Meta Information",
+    "H1 Tag": "Page Structure",
+    "Language Declared": "Meta Information",
+    "Viewport Tag": "Page Structure",
+    "Favicon Linked": "Meta Information",
+    "Paragraphs": "Content Quality",
+    "Word Count": "Content Quality",
+    "Bold/Strong Tags": "Content Quality",
+    "Image Alt Tags": "Images",
+    "Schema Markup Types": "Meta Information",
+    "Google PageSpeed Score": "Performance"
+}
 
 def ensure_scheme(url):
     if not url.startswith(('http://', 'https://')):
@@ -102,67 +115,47 @@ def fetch_pagespeed_score(url):
 def calculate_score(data):
     score = 0
     reasons = []
+    section_scores = {}
 
-    if data['Meta Description'] != "Missing":
-        score += SCORES['Meta Description']
-    else:
-        reasons.append("Missing meta description")
+    for factor, weight in SCORES.items():
+        passed = False
+        if factor == 'Meta Description' and data[factor] != "Missing":
+            passed = True
+        elif factor == 'H1 Tag' and data[factor] != "Missing":
+            passed = True
+        elif factor == 'Language Declared' and data[factor] != "Missing":
+            passed = True
+        elif factor == 'Viewport Tag' and data[factor] == "Present":
+            passed = True
+        elif factor == 'Favicon Linked' and data[factor] == "Present":
+            passed = True
+        elif factor == 'Paragraphs' and data[factor] >= 3:
+            passed = True
+        elif factor == 'Word Count' and data[factor] >= 300:
+            passed = True
+        elif factor == 'Bold/Strong Tags' and data[factor] > 0:
+            passed = True
+        elif factor == 'Image Alt Tags':
+            with_alt, _, _ = data['Image Alt Tags Raw']
+            if with_alt > 0:
+                passed = True
+        elif factor == 'Schema Markup Types' and data[factor] != "None detected":
+            passed = True
+        elif factor == 'Google PageSpeed Score':
+            score_val = data[factor]
+            if isinstance(score_val, int) and score_val >= 50:
+                passed = True
 
-    if data['H1 Tag'] != "Missing":
-        score += SCORES['H1 Tag']
-    else:
-        reasons.append("Missing H1 tag")
-
-    if data['Language Declared'] != "Missing":
-        score += SCORES['Language Declared']
-    else:
-        reasons.append("No language declared in HTML tag")
-
-    if data['Viewport Tag'] == "Present":
-        score += SCORES['Viewport Tag']
-    else:
-        reasons.append("Missing viewport meta tag")
-
-    if data['Favicon Linked'] == "Present":
-        score += SCORES['Favicon Linked']
-    else:
-        reasons.append("Missing favicon link")
-
-    if data['Paragraphs'] >= 3:
-        score += SCORES['Paragraphs']
-    else:
-        reasons.append("Too few paragraph tags")
-
-    if data['Word Count'] >= 300:
-        score += SCORES['Word Count']
-    else:
-        reasons.append("Low word count")
-
-    if data['Bold/Strong Tags'] > 0:
-        score += SCORES['Bold/Strong Tags']
-    else:
-        reasons.append("No strong or bold tags")
-
-    with_alt, without_alt, total = data['Image Alt Tags Raw']
-    if with_alt > 0:
-        score += SCORES['Image Alt Tags']
-    else:
-        reasons.append("All images missing alt tags")
-
-    if data['Schema Markup Types'] != "None detected":
-        score += SCORES['Schema Markup Types']
-    else:
-        reasons.append("No schema.org structured data found")
-
-    if isinstance(data['Google PageSpeed Score'], int):
-        if data['Google PageSpeed Score'] >= 50:
-            score += SCORES['Google PageSpeed Score']
+        section = SECTION_MAPPING.get(factor, "General")
+        if section not in section_scores:
+            section_scores[section] = 0
+        if passed:
+            section_scores[section] += weight
+            score += weight
         else:
-            reasons.append("PageSpeed score too low")
-    else:
-        reasons.append("No PageSpeed score available")
+            reasons.append(f"{factor} needs improvement")
 
-    return min(score, 100), reasons
+    return min(score, 100), reasons, section_scores
 
 def analyze_seo(url):
     try:
@@ -212,9 +205,10 @@ def analyze_seo(url):
             "Google PageSpeed Score": pagespeed_score
         }
 
-        score, suggestions = calculate_score(result)
+        score, suggestions, section_scores = calculate_score(result)
         result["SEO Score"] = f"{score}%"
         result["Improvement Suggestions"] = suggestions
+        result["Section Scores"] = section_scores
         return result
 
     except Exception as e:

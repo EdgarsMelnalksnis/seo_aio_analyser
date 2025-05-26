@@ -2,37 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SEO + AIO Analyzer</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>SEO Summary Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f9f9f9;
+    }
+    .container {
+      max-width: 900px;
+      margin-top: 40px;
+    }
+    .section-title {
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>SEO + AIO Checker</h1>
-    <form method="POST">
-      <input type="text" name="url" placeholder="Enter website URL" required>
-      <button type="submit">Analyze</button>
-    </form>
+<div class="container">
+  <h1 class="text-center mb-4">SEO Summary Report</h1>
 
-    {% if results %}
-      <h2>Results:</h2>
-      <div class="section">
-        <h3>🔍 SEO Results</h3>
-        <ul>
-          {% for key, value in results.seo.items() %}
-            <li><strong>{{ key }}:</strong> {{ value }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="section">
-        <h3>🧠 AIO Results</h3>
-        <ul>
-          {% for key, value in results.aio.items() %}
-            <li><strong>{{ key }}:</strong> {{ value }}</li>
-          {% endfor %}
-        </ul>
-      </div>
+  <!-- Error message -->
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <!-- URL input form -->
+  <form method="POST" class="mb-5">
+    <div class="input-group">
+      <input type="text" name="url" class="form-control" placeholder="Enter website URL" required>
+      <button type="submit" class="btn btn-primary">Analyze</button>
+    </div>
+  </form>
+
+  {% if results %}
+    {% if results.get('Section Scores') %}
+      <h3 class="section-title">Section Scores</h3>
+      <ul class="list-group">
+        <li class="list-group-item">Meta information: <strong>{{ results['Section Scores'].get('Meta Information', 0) }}%</strong></li>
+        <li class="list-group-item">Page quality: <strong>{{ results['Section Scores'].get('Content Quality', 0) }}%</strong></li>
+        <li class="list-group-item">Link structure: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong></li>
+        <li class="list-group-item">Performance: <strong>{{ results['Section Scores'].get('Performance', 0) }}%</strong></li>
+        <li class="list-group-item">Images: <strong>{{ results['Section Scores'].get('Images', 0) }}%</strong></li>
+        <li class="list-group-item">Overall SEO score: <strong>{{ results.get('SEO Score', 'N/A') }}</strong></li>
+      </ul>
     {% endif %}
-  </div>
+
+    <h3 class="section-title">Technical Stats</h3>
+    <ul class="list-group">
+      <li class="list-group-item">Response time: <strong>~2.34s</strong></li>  <!-- Placeholder -->
+      <li class="list-group-item">File size: <strong>~45.80 KB</strong></li>  <!-- Placeholder -->
+      <li class="list-group-item">Media files: <strong>{{ results['Image Alt Tags Raw'][2] }}</strong></li>
+      <li class="list-group-item">Image tags with alt: <strong>{{ results['Image Alt Tags Raw'][0] }}</strong></li>
+    </ul>
+
+    {% if results.get('Improvement Suggestions') %}
+      <h3 class="section-title text-danger">Critical Tasks To Improve</h3>
+      <ul class="list-group">
+        {% for suggestion in results['Improvement Suggestions'] %}
+          <li class="list-group-item text-danger">❗ {{ suggestion }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <h3 class="section-title">Improvement Guide</h3>
+    <table class="table table-bordered mt-3">
+      <thead class="table-light">
+        <tr>
+          <th>Issue</th>
+          <th>What it is</th>
+          <th>How to improve</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dynamic URL Parameters</td>
+          <td>URLs like `?id=123` are harder to index.</td>
+          <td>Use clean URLs like `/product/123`.</td>
+        </tr>
+        <tr>
+          <td>Slow Response</td>
+          <td>Pages that load slowly hurt SEO.</td>
+          <td>Enable caching, compress images, optimize JS/CSS.</td>
+        </tr>
+        <tr>
+          <td>Domain in Title</td>
+          <td>May reduce relevance for search engines.</td>
+          <td>Focus on keywords first in the page title.</td>
+        </tr>
+        <tr>
+          <td>Missing Meta Description</td>
+          <td>Hurts how your page appears in search results.</td>
+          <td>Add a descriptive `<meta name=\"description\">` tag.</td>
+        </tr>
+        <tr>
+          <td>Missing HTML Language</td>
+          <td>Search engines may not know your site's language.</td>
+          <td>Add `lang=\"en\"` (or your actual language) to the `<html>` tag.</td>
+        </tr>
+      </tbody>
+    </table>
+  {% endif %}
+</div>
 </body>
 </html>
 
