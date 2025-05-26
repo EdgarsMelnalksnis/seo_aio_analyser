@@ -8,22 +8,22 @@
 <body>
 <div class="container py-5">
   <form method="POST" class="mb-4">
-    <div class="input-group">
-      <input type="text" name="url" class="form-control" placeholder="Enter website URL" required>
-      <button type="submit" class="btn btn-primary">Analyze</button>
-    </div>
-  </form>
+  <div class="input-group">
+    <input type="text" name="url" class="form-control" placeholder="Enter website URL" required>
+    <button type="submit" class="btn btn-primary">Analyze</button>
+  </div>
+</form>
 
 {% if results %}
 <ul class="list-group mb-5">
   <li class="list-group-item d-flex justify-content-between align-items-center">
     Meta Information: <strong>{{ meta_info_score }}%</strong>
-    <a href="#meta-info" class="scroll-link btn btn-outline-info btn-sm">What is this?</a>
+    <a href="#meta-info" class="scroll-link" class="btn btn-outline-info btn-sm">What is this?</a>
   </li>
   <li class="list-group-item d-flex justify-content-between align-items-center">
-    Page Quality: <strong>{{ results['Section Scores'].get('Content Quality', 0) }}%</strong>
-    <a href="#pageQualityModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
-  </li>
+  Page Quality: <strong>{{ page_quality_score }}%</strong>
+  <a href="#page-quality" class="scroll-link btn btn-outline-info btn-sm">What is this?</a>
+</li>
   <li class="list-group-item d-flex justify-content-between align-items-center">
     Link Structure: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong>
     <a href="#linkStructureModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
@@ -37,30 +37,28 @@
     <a href="#externalFactorsModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
   </li>
 </ul>
+  <h1 id="meta-info" class="mb-4 bg-warning-subtle p-2 rounded">Meta Information in SEO</h1>
 
-<h1 id="meta-info" class="mb-4 bg-warning-subtle p-2 rounded">Meta Information in SEO</h1>
-<p><strong>Meta information</strong> refers to HTML elements that provide metadata about your web page to search engines and browsers. These tags do not affect how the page looks but play a crucial role in SEO and accessibility.</p>
+  <p><strong>Meta information</strong> refers to HTML elements that provide metadata about your web page to search engines and browsers. These tags do not affect how the page looks but play a crucial role in SEO and accessibility.</p>
 
-<h3 class="mt-4">Key Elements of Meta Information</h3>
-<ul>
-  <li><strong>Meta Description:</strong> A summary shown in search results. Recommended length: 150–160 characters.<br>
-    <code>&lt;meta name="description" content="Your concise page summary here."&gt;</code>
-  </li>
-  <li><strong>HTML Language:</strong> Informs search engines and browsers of the content language.<br>
-    <code>&lt;html lang="en"&gt;</code>
-  </li>
-  <li><strong>Favicon:</strong> The small icon shown in browser tabs and bookmarks.<br>
-    <code>&lt;link rel="icon" href="/favicon.ico" type="image/x-icon"&gt;</code>
-  </li>
-</ul>
-
+  <h3 class="mt-4">Key Elements of Meta Information</h3>
+  <ul>
+    <li><strong>Meta Description:</strong> A summary shown in search results. Recommended length: 150–160 characters.<br>
+      <code>&lt;meta name="description" content="Your concise page summary here."&gt;</code>
+    </li>
+    <li><strong>HTML Language:</strong> Informs search engines and browsers of the content language.<br>
+      <code>&lt;html lang="en"&gt;</code>
+    </li>
+    <li><strong>Favicon:</strong> The small icon shown in browser tabs and bookmarks.<br>
+      <code>&lt;link rel="icon" href="/favicon.ico" type="image/x-icon"&gt;</code>
+    </li>
+  </ul>
 <h3 class="mt-4">Why Meta Information Matters</h3>
-<ul>
-  <li>Improves visibility and click-through rate (CTR) in search engines</li>
-  <li>Helps AI and bots better understand your content</li>
-  <li>Boosts credibility and professionalism with proper language and icons</li>
-</ul>
-
+  <ul>
+    <li>Improves visibility and click-through rate (CTR) in search engines</li>
+    <li>Helps AI and bots better understand your content</li>
+    <li>Boosts credibility and professionalism with proper language and icons</li>
+  </ul>
 <h3 class="mt-4">Meta Information Checklist</h3>
 <table class="table table-bordered">
   <thead class="table-light">
@@ -81,6 +79,50 @@
   </tbody>
 </table>
 
+<h1 id="page-quality" class="mt-5 mb-4 bg-warning-subtle p-2 rounded">Page Quality in SEO</h1>
+<p><strong>Page Quality</strong> refers to the usefulness, originality, and clarity of your webpage content. Google ranks pages higher when they offer well-structured, unique, and meaningful information to users.</p>
+
+<h3 class="mt-4">Key Elements of Page Quality</h3>
+<ul>
+  <li><strong>Word Count:</strong> Avoid thin content. Aim for 300+ words per page.</li>
+  <li><strong>Content Relevance:</strong> Content should match title and headings.</li>
+  <li><strong>Use of Lists and Headings:</strong> Improves readability and structure.</li>
+  <li><strong>No Placeholder Text:</strong> e.g., "Lorem Ipsum" or dummy content should not exist.</li>
+  <li><strong>Paragraphs and Formatting:</strong> Short paragraphs (2–4 sentences) work best.</li>
+</ul>
+
+<h3 class="mt-4">Why Page Quality Matters</h3>
+<ul>
+  <li>Increases user engagement and time on page</li>
+  <li>Improves trust and clarity for both users and search engines</li>
+  <li>Helps avoid Google’s “low quality” penalties</li>
+</ul>
+
+<h3 class="mt-4">How We Score Page Quality</h3>
+<p>Each of the following checks contributes equally to the Page Quality score:</p>
+<ul>
+  <li>Sufficient word count</li>
+  <li>No placeholder content</li>
+  <li>Use of bullet points or headings</li>
+  <li>Paragraph count</li>
+  <li>H1 used in content</li>
+</ul>
+<p>The Page Quality score is: <strong>{{ page_quality_score }}%</strong></p>
+
+<h3 class="mt-4">Page Quality Checklist</h3>
+<table class="table table-bordered">
+  <thead class="table-light">
+    <tr><th>Criteria</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Word Count ≥ 300</td><td>{% if results.get('Word Count', 0) >= 300 %}✅ Pass{% else %}❌ Low{% endif %}</td></tr>
+    <tr><td>No Placeholder Text</td><td>{% if results.get('Has Placeholder Text', False) == False %}✅ Clean{% else %}❌ Found{% endif %}</td></tr>
+    <tr><td>Bullet Points or Lists</td><td>{% if results.get('Has Bullet Points', False) %}✅ Used{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Paragraph Count ≥ 3</td><td>{% if results.get('Paragraph Count', 0) >= 3 %}✅ Adequate{% else %}❌ Too Few{% endif %}</td></tr>
+    <tr><td>H1 Tag Present in Content</td><td>{% if results.get('H1 in Body Text', False) %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+  </tbody>
+</table>
+
 <h3 class="mt-4">How We Score Meta Information</h3>
 <p>Each check below contributes equally. We calculate the Meta Information score based on how many of the following tags are present:</p>
 <ul>
@@ -97,10 +139,8 @@
   <li>SEO-friendly page URL</li>
 </ul>
 <p>The Meta Information score is: <strong>{{ meta_info_score }}%</strong></p>
-
-<a href="/" class="btn btn-primary mt-4">← Back to Report</a>
-
 {% endif %}
+<a href="/" class="btn btn-primary mt-4">← Back to Report</a>
 </div>
 <script>
   document.querySelectorAll('.scroll-link').forEach(link => {
@@ -117,3 +157,4 @@
 </script>
 </body>
 </html>
+
