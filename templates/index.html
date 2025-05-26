@@ -2,107 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SEO Summary Report</title>
+  <title>What is Meta Information?</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container py-5">
-  <h1 class="mb-4">SEO Summary Report</h1>
   <form method="POST" class="mb-4">
     <div class="input-group">
       <input type="text" name="url" class="form-control" placeholder="Enter website URL" required>
       <button type="submit" class="btn btn-primary">Analyze</button>
     </div>
   </form>
-  {% if error %}
-    <div class="alert alert-danger">{{ error }}</div>
-  {% endif %}
-  {% if results %}
-    <ul class="list-group">
-      <li class="list-group-item">
-        Meta Information: <strong>{{ results['Section Scores'].get('Meta Information', 0) }}%</strong>
-        <a href="#metaInfoModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
-      </li>
-      <li class="list-group-item">
-        Page Quality: <strong>{{ results['Section Scores'].get('Content Quality', 0) }}%</strong>
-        <a href="#pageQualityModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
-      </li>
-      <li class="list-group-item">
-        Link Structure: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong>
-        <a href="#linkStructureModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
-      </li>
-      <li class="list-group-item">
-        Performance: <strong>{{ results['Section Scores'].get('Performance', 0) }}%</strong>
-        <a href="#performanceModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
-      </li>
-      <li class="list-group-item">
-        External Factors: <strong>12%</strong>
-        <a href="#externalFactorsModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm ms-2">What is this?</a>
-      </li>
-    </ul>
-  {% endif %}
-</div>
-<!-- 📦 Modal Content (put at end of body in index.html) -->
-<div class="modal fade" id="metaInfoModal" tabindex="-1">
-  <div class="modal-dialog modal-lg"><div class="modal-content">
-    <div class="modal-header"><h5 class="modal-title">Meta Information</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-    <div class="modal-body">
-      <p><strong>Meta information</strong> helps browsers and bots understand your page. It includes:</p>
-      <ul>
-        <li><strong>Meta Description</strong> – Summarizes the page (used in Google results)</li>
-        <li><strong>HTML Language</strong> – Declared with &lt;html lang="..."&gt;</li>
-        <li><strong>Favicon</strong> – Shown in browser tab bookmarks</li>
-      </ul>
-      <p>Improve meta info by setting a description, declaring language, and adding a favicon.</p>
-    </div>
-  </div></div>
-</div>
 
-<div class="modal fade" id="pageQualityModal" tabindex="-1">
-  <div class="modal-dialog modal-lg"><div class="modal-content">
-    <div class="modal-header"><h5 class="modal-title">Page Quality</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-    <div class="modal-body">
-      <p>Page quality is determined by content richness and layout:</p>
-      <ul><li>Good paragraph structure</li><li>High word count (300+ recommended)</li><li>Use of strong/bold tags</li></ul>
-    </div>
-  </div></div>
-</div>
+{% if results %}
+<ul class="list-group mb-5">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Meta Information: <strong>{{ meta_info_score }}%</strong>
+    <a href="#meta-info" class="scroll-link btn btn-outline-info btn-sm">What is this?</a>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Page Quality: <strong>{{ results['Section Scores'].get('Content Quality', 0) }}%</strong>
+    <a href="#pageQualityModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Link Structure: <strong>{{ results['Section Scores'].get('Page Structure', 0) }}%</strong>
+    <a href="#linkStructureModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Performance: <strong>{{ results['Section Scores'].get('Performance', 0) }}%</strong>
+    <a href="#performanceModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    External Factors: <strong>12%</strong>
+    <a href="#externalFactorsModal" data-bs-toggle="modal" class="btn btn-outline-info btn-sm">What is this?</a>
+  </li>
+</ul>
 
-<div class="modal fade" id="linkStructureModal" tabindex="-1">
-  <div class="modal-dialog modal-lg"><div class="modal-content">
-    <div class="modal-header"><h5 class="modal-title">Link Structure</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-    <div class="modal-body">
-      <p>Link structure measures how well internal and external links are organized:</p>
-      <ul><li>Avoid duplicate anchor texts</li><li>Use clean URLs (no ?id=123)</li><li>Provide enough internal links</li></ul>
-    </div>
-  </div></div>
-</div>
+<h1 id="meta-info" class="mb-4 bg-warning-subtle p-2 rounded">Meta Information in SEO</h1>
+<p><strong>Meta information</strong> refers to HTML elements that provide metadata about your web page to search engines and browsers. These tags do not affect how the page looks but play a crucial role in SEO and accessibility.</p>
 
-<div class="modal fade" id="performanceModal" tabindex="-1">
-  <div class="modal-dialog modal-lg"><div class="modal-content">
-    <div class="modal-header"><h5 class="modal-title">Performance</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-    <div class="modal-body">
-      <p>Performance impacts user experience and SEO:</p>
-      <ul><li>Minimize server response time</li><li>Optimize images, CSS, JS</li><li>Use caching and compression</li></ul>
-    </div>
-  </div></div>
-</div>
+<h3 class="mt-4">Key Elements of Meta Information</h3>
+<ul>
+  <li><strong>Meta Description:</strong> A summary shown in search results. Recommended length: 150–160 characters.<br>
+    <code>&lt;meta name="description" content="Your concise page summary here."&gt;</code>
+  </li>
+  <li><strong>HTML Language:</strong> Informs search engines and browsers of the content language.<br>
+    <code>&lt;html lang="en"&gt;</code>
+  </li>
+  <li><strong>Favicon:</strong> The small icon shown in browser tabs and bookmarks.<br>
+    <code>&lt;link rel="icon" href="/favicon.ico" type="image/x-icon"&gt;</code>
+  </li>
+</ul>
 
-<div class="modal fade" id="externalFactorsModal" tabindex="-1">
-  <div class="modal-dialog modal-lg"><div class="modal-content">
-    <div class="modal-header"><h5 class="modal-title">External Factors</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-    <div class="modal-body">
-      <p>External SEO factors include:</p>
-      <ul><li>Backlinks from trusted domains</li><li>Mentions on social platforms</li><li>Brand authority signals</li></ul>
-    </div>
-  </div></div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<h3 class="mt-4">Why Meta Information Matters</h3>
+<ul>
+  <li>Improves visibility and click-through rate (CTR) in search engines</li>
+  <li>Helps AI and bots better understand your content</li>
+  <li>Boosts credibility and professionalism with proper language and icons</li>
+</ul>
 
+<h3 class="mt-4">Meta Information Checklist</h3>
+<table class="table table-bordered">
+  <thead class="table-light">
+    <tr><th>Tag</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Title</td><td>{% if results['Page Title'] != 'Missing' %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Meta Description</td><td>{% if results['Meta Description'] != 'Missing' %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Crawlability (robots.txt)</td><td>{% if results['robots.txt'] != 'Failed to fetch' %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Canonical URL</td><td>❌ Missing</td></tr>
+    <tr><td>Language</td><td>{% if results.get('Language Declared', '') != 'Missing' %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Alternate/Hreflang</td><td>❌ Missing</td></tr>
+    <tr><td>Other meta tags (viewport, charset)</td><td>{% if results.get('Viewport Tag') == 'Present' %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+    <tr><td>Domain (no special characters)</td><td>✅ Good</td></tr>
+    <tr><td>Page URL (SEO friendly)</td><td>✅ Good</td></tr>
+    <tr><td>Charset Encoding</td><td>✅ UTF-8</td></tr>
+    <tr><td>Favicon</td><td>{% if results.get('Favicon Linked') == 'Present' %}✅ Present{% else %}❌ Missing{% endif %}</td></tr>
+  </tbody>
+</table>
+
+<h3 class="mt-4">How We Score Meta Information</h3>
+<p>Each check below contributes equally. We calculate the Meta Information score based on how many of the following tags are present:</p>
+<ul>
+  <li>Title</li>
+  <li>Meta Description</li>
+  <li>robots.txt (Crawlability)</li>
+  <li>Canonical URL</li>
+  <li>Language tag</li>
+  <li>Alternate/Hreflang</li>
+  <li>Viewport tag</li>
+  <li>Favicon</li>
+  <li>Charset encoding</li>
+  <li>Domain quality</li>
+  <li>SEO-friendly page URL</li>
+</ul>
+<p>The Meta Information score is: <strong>{{ meta_info_score }}%</strong></p>
+
+<a href="/" class="btn btn-primary mt-4">← Back to Report</a>
+
+{% endif %}
+</div>
+<script>
+  document.querySelectorAll('.scroll-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.classList.add('bg-warning-subtle');
+        setTimeout(() => target.classList.remove('bg-warning-subtle'), 3000);
+      }
+    });
+  });
+</script>
 </body>
 </html>
