@@ -274,18 +274,268 @@
       </div>
       
       <!-- Content Quality Tab -->
-      <div class="tab-pane fade" id="content" role="tabpanel">
-        <!-- Similar structured content for Content Quality -->
-      </div>
       
+	<div class="tab-pane fade" id="content" role="tabpanel">
+	  <div class="section-header mb-4">
+	    <h2><i class="bi bi-file-text text-success me-2"></i>Content Quality</h2>
+	    <p class="text-muted">Measures the usefulness, originality, and clarity of your webpage content.</p>
+	  </div>
+	  
+	  <div class="row">
+	    <div class="col-md-6">
+	      <div class="card mb-4">
+		<div class="card-header bg-success text-white">
+		  <h5 class="mb-0">Content Structure</h5>
+		</div>
+		<div class="card-body">
+		  <ul class="list-group list-group-flush">
+		    <li class="list-group-item d-flex justify-content-between align-items-center">
+		      Word Count
+		      <span class="badge {% if results.get('Word Count', 0) >= 300 %}bg-success{% else %}bg-danger{% endif %}">
+			{{ results.get('Word Count', 0) }} words
+		      </span>
+		    </li>
+		    <li class="list-group-item d-flex justify-content-between align-items-center">
+		      Placeholder Text
+		      <span class="badge {% if not results.get('Has Placeholder Text', False) %}bg-success{% else %}bg-danger{% endif %}">
+			{% if not results.get('Has Placeholder Text', False) %}Clean{% else %}Found{% endif %}
+		      </span>
+		    </li>
+		    <li class="list-group-item d-flex justify-content-between align-items-center">
+		      Paragraphs
+		      <span class="badge {% if results.get('Paragraph Count', 0) >= 3 %}bg-success{% else %}bg-warning{% endif %}">
+			{{ results.get('Paragraph Count', 0) }} found
+		      </span>
+		    </li>
+		  </ul>
+		</div>
+	      </div>
+	    </div>
+	    
+	    <div class="col-md-6">
+	      <div class="card mb-4">
+		<div class="card-header bg-success text-white">
+		  <h5 class="mb-0">Readability</h5>
+		</div>
+		<div class="card-body">
+		  <ul class="list-group list-group-flush">
+		    <li class="list-group-item d-flex justify-content-between align-items-center">
+		      Bullet Points/Lists
+		      <span class="badge {% if results.get('Has Bullet Points', False) %}bg-success{% else %}bg-danger{% endif %}">
+			{% if results.get('Has Bullet Points', False) %}Present{% else %}Missing{% endif %}
+		      </span>
+		    </li>
+		    <li class="list-group-item d-flex justify-content-between align-items-center">
+		      H1 in Body Text
+		      <span class="badge {% if results.get('H1 in Body Text', False) %}bg-success{% else %}bg-danger{% endif %}">
+			{% if results.get('H1 in Body Text', False) %}Present{% else %}Missing{% endif %}
+		      </span>
+		    </li>
+		    <li class="list-group-item d-flex justify-content-between align-items-center">
+		      Heading Hierarchy
+		      <span class="badge {% if results.get('Heading Hierarchy Valid', False) %}bg-success{% else %}bg-danger{% endif %}">
+			{% if results.get('Heading Hierarchy Valid', False) %}Valid{% else %}Invalid{% endif %}
+		      </span>
+		    </li>
+		  </ul>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+	  
+	  <div class="alert alert-success">
+	    <h5><i class="bi bi-info-circle-fill me-2"></i>Content Quality Score: {{ page_quality_score }}%</h5>
+	    <p class="mb-0">This score evaluates content depth, structure, and readability factors that affect user engagement.</p>
+	  </div>
+	</div>
+
       <!-- Performance Tab -->
-      <div class="tab-pane fade" id="performance" role="tabpanel">
-        <!-- Similar structured content for Performance -->
+      <div class="tab-pane fade" id="content" role="tabpanel">
+  <div class="section-header mb-4">
+    <h2><i class="bi bi-file-text text-success me-2"></i>Content Quality</h2>
+    <p class="text-muted">Measures the usefulness, originality, and clarity of your webpage content.</p>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Content Structure</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Word Count
+              <span class="badge {% if results.get('Word Count', 0) >= 300 %}bg-success{% else %}bg-danger{% endif %}">
+                {{ results.get('Word Count', 0) }} words
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Placeholder Text
+              <span class="badge {% if not results.get('Has Placeholder Text', False) %}bg-success{% else %}bg-danger{% endif %}">
+                {% if not results.get('Has Placeholder Text', False) %}Clean{% else %}Found{% endif %}
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Paragraphs
+              <span class="badge {% if results.get('Paragraph Count', 0) >= 3 %}bg-success{% else %}bg-warning{% endif %}">
+                {{ results.get('Paragraph Count', 0) }} found
+              </span>
+            </li>
+          </ul>
+        </div>
       </div>
-      
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Readability</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Bullet Points/Lists
+              <span class="badge {% if results.get('Has Bullet Points', False) %}bg-success{% else %}bg-danger{% endif %}">
+                {% if results.get('Has Bullet Points', False) %}Present{% else %}Missing{% endif %}
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              H1 in Body Text
+              <span class="badge {% if results.get('H1 in Body Text', False) %}bg-success{% else %}bg-danger{% endif %}">
+                {% if results.get('H1 in Body Text', False) %}Present{% else %}Missing{% endif %}
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Heading Hierarchy
+              <span class="badge {% if results.get('Heading Hierarchy Valid', False) %}bg-success{% else %}bg-danger{% endif %}">
+                {% if results.get('Heading Hierarchy Valid', False) %}Valid{% else %}Invalid{% endif %}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="alert alert-success">
+    <h5><i class="bi bi-info-circle-fill me-2"></i>Content Quality Score: {{ page_quality_score }}%</h5>
+    <p class="mb-0">This score evaluates content depth, structure, and readability factors that affect user engagement.</p>
+  </div>
+</div>
       <!-- External Factors Tab -->
-      <div class="tab-pane fade" id="external" role="tabpanel">
-        <!-- Similar structured content for External Factors -->
+<div class="tab-pane fade" id="external" role="tabpanel">
+  <div class="section-header mb-4">
+    <h2><i class="bi bi-link-45deg text-warning me-2"></i>External Factors</h2>
+    <p class="text-muted">Measures how your website is referenced from outside sources.</p>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header bg-warning text-white">
+          <h5 class="mb-0">Backlink Profile</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Backlink Count
+              <span class="badge {% if results.get('Backlink Count', 0) > 0 %}bg-success{% else %}bg-danger{% endif %}">
+                {{ results.get('Backlink Count', 0) }} links
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Referring Domains
+              <span class="badge {% if results.get('Referring Domains', 0) > 1 %}bg-success{% else %}bg-warning{% endif %}">
+                {{ results.get('Referring Domains', 0) }} domains
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header bg-warning text-white">
+          <h5 class="mb-0">Authority Signals</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Authority Mentions
+              <span class="badge {% if results.get('In Authority Sources', False) %}bg-success{% else %}bg-danger{% endif %}">
+                {% if results.get('In Authority Sources', False) %}Found{% else %}None{% endif %}
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Social Signals
+              <span class="badge bg-secondary">
+                Not Analyzed
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="alert alert-warning">
+    <h5><i class="bi bi-info-circle-fill me-2"></i>External Factors Score: {{ results['Section Scores'].get('External Factors', 0) }}%</h5>
+    <p class="mb-0">This score evaluates off-page SEO factors that contribute to domain authority.</p>
+  </div>
+</div>  
+
+<!-- OVERALL SUMMARY AND SCORES -->
+{% if results %}
+<div class="alert alert-success text-center mb-4">
+  <h4><i class="bi bi-bar-chart-line-fill me-2"></i>Overall SEO Score: {{ total_score }}%</h4>
+  <p>This score is calculated as the average of all major SEO categories.</p>
+</div>
+
+<!-- Content Quality Tab -->
+<div class="tab-pane fade" id="content" role="tabpanel">
+  <div class="section-header mb-4">
+    <h2><i class="bi bi-file-text text-success me-2"></i>Content Quality – {{ page_quality_score }}%</h2>
+    <p class="text-muted">Content length, clarity, and structure impact SEO effectiveness.</p>
+  </div>
+  <ul class="list-group">
+    <li class="list-group-item">Word Count: {{ results['Word Count'] }}</li>
+    <li class="list-group-item">Has Placeholder Text: {{ results['Has Placeholder Text'] }}</li>
+    <li class="list-group-item">Bullet Points Present: {{ results['Has Bullet Points'] }}</li>
+    <li class="list-group-item">Paragraph Count: {{ results['Paragraph Count'] }}</li>
+    <li class="list-group-item">H1 in Body Text: {{ results['H1 in Body Text'] }}</li>
+  </ul>
+</div>
+
+<!-- Performance Tab -->
+<div class="tab-pane fade" id="performance" role="tabpanel">
+  <div class="section-header mb-4">
+    <h2><i class="bi bi-lightning-charge text-info me-2"></i>Performance – {{ performance_score }}%</h2>
+    <p class="text-muted">Website speed, compression, and asset optimization affect rankings.</p>
+  </div>
+  <ul class="list-group">
+    <li class="list-group-item">Page Load Time: {{ results['Page Load Time'] }} sec</li>
+    <li class="list-group-item">HTML Size: {{ results['HTML Size (KB)'] }} KB</li>
+    <li class="list-group-item">Total Assets: {{ results['Total Assets'] }}</li>
+    <li class="list-group-item">Gzip/Zstd Compression Enabled: {% if 'gzip' in results['Response Headers'] or 'zstd' in results['Response Headers'] %}Yes{% else %}No{% endif %}</li>
+  </ul>
+</div>
+
+<!-- External Factors Tab -->
+<div class="tab-pane fade" id="external" role="tabpanel">
+  <div class="section-header mb-4">
+    <h2><i class="bi bi-link-45deg text-warning me-2"></i>External Factors – {{ external_score }}%</h2>
+    <p class="text-muted">Backlinks and domain authority influence search visibility.</p>
+  </div>
+  <ul class="list-group">
+    <li class="list-group-item">Backlink Count: {{ results['Backlink Count'] }}</li>
+    <li class="list-group-item">Referring Domains: {{ results['Referring Domains'] }}</li>
+    <li class="list-group-item">In Authority Sources: {{ results['In Authority Sources'] }}</li>
+  </ul>
+</div>
+{% endif %}
+
       </div>
     </div>
     {% endif %}
